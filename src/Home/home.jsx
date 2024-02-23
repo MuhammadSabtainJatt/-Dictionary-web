@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons'; // Import the search icon from FontAwesome
+import { faSearch, faVolumeUp, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'; // Import necessary icons
 
 export default function Home() {
   const [word, setWord] = useState('');
-  const [result, setResult] = useState(null); // State to store the API result
-  const [error, setError] = useState(null); // State to store error messages, if any
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
-    setWord(e.target.value); // Update the word state as the user types
+    setWord(e.target.value);
   };
 
   const handleSubmit = () => {
@@ -20,17 +20,22 @@ export default function Home() {
         return response.json();
       })
       .then((data) => {
-        setResult(data); // Store the API result in the result state
-        setError(null); // Clear any previous error messages
+        setResult(data);
+        setError(null);
       })
       .catch((error) => {
-        setResult(null); // Clear the result state
-        setError(error.message); // Store the error message
+        setResult(null);
+        setError(error.message);
       });
   };
 
+  const handleAudioClick = (audioUrl) => {
+    const audio = new Audio(audioUrl);
+    audio.play();
+  };
+
   return (
-    <div className="main bg-info">
+    <div className="main bg-warning">
       <div className="container">
         <div className="row">
           <div className="col mt-4 text-center">
@@ -44,25 +49,57 @@ export default function Home() {
               type="text"
               name="word"
               placeholder="Enter Word"
-              className="mt-5 p-2 w-75 shadow border rounded-5"
-              style={{ backgroundColor: 'transparent' }}
-              value={word} // Bind the value of the input field to the word state
-              onChange={handleChange} // Handle input changes
+              className="mt-5 p-2 w-75 shadow  rounded-5"
+              style={{ backgroundColor: 'transparent',border:"none" }}
+              value={word}
+              onChange={handleChange}
             />
             <button
-              className="btn btn-danger p-2 shadow border rounded-5 text-dark"
-              onClick={handleSubmit} // Handle form submission
+              className="btn  p-2 shadow  rounded-5 text-dark" style={{border:"none"}}
+              onClick={handleSubmit}
             >
-              <FontAwesomeIcon icon={faSearch} /> {/* Display the search icon */}
+              <FontAwesomeIcon icon={faSearch} />
             </button>
           </div>
         </div>
-        {error && <p className="text-danger">{error}</p>} {/* Display error messages, if any */}
-        {result && (
+        {error && (
           <div className="row">
             <div className="col text-center">
-              {/* Display the dictionary result */}
-              {/* You need to implement rendering of the result based on the API response */}
+              <p className="text-danger"><img src="https://vectorified.com/images/no-data-icon-10.png" width={400} alt="" /></p>
+              
+            </div>
+          </div>
+        )}
+        {result && result.length > 0 && (
+          <div className="row">
+            <div className="col">
+              {result.map((entry, index) => (
+                <div key={index}>
+                  <h2>{entry.word}</h2>
+                  {entry.meanings && entry.meanings.map((meaning, meaningIndex) => (
+                    <div key={meaningIndex}>
+                      <h3>{meaning.partOfSpeech}</h3>
+                      <ul>
+                        {meaning.definitions && meaning.definitions.map((definition, definitionIndex) => (
+                          <li key={definitionIndex}>
+                            <strong>Definition:</strong> {definition.definition}<br />
+                            {definition.example && <span><strong>Example:</strong> {definition.example}</span>}
+                          </li>
+                        ))}
+                      </ul>
+                      {meaning.phonetics && meaning.phonetics.map((phonetic, phoneticIndex) => (
+                        <button
+                          key={phoneticIndex}
+                          className="btn btn-danger"
+                          onClick={() => handleAudioClick(phonetic.audio)}
+                        >
+                          <FontAwesomeIcon icon={faVolumeUp} />
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         )}
