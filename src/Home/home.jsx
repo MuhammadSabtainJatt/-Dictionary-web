@@ -52,7 +52,7 @@ export default function Home() {
               className="mt-5 p-2 w-75 shadow  rounded-5"
               style={{ backgroundColor: 'transparent',border:"none" }}
               value={word}
-              onChange={handleChange}
+              onChange={handleChange }
             />
             <button
               className="btn  p-2 shadow  rounded-5 text-dark" style={{border:"none"}}
