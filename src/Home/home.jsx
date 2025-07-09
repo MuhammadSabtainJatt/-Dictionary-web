@@ -2,6 +2,7 @@ import React, { useState,useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import "../Scss/home.scss";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { HiOutlineSpeakerWave } from "react-icons/hi2";
 
 const DictionaryApp = () => {
   const [word, setWord] = useState("");
@@ -80,7 +81,7 @@ const DictionaryApp = () => {
             {theme === "light" ? <MdDarkMode /> : <MdLightMode />} 
           </button>
         </div>
-        <h1 className="title">📘 Dictionary</h1>
+        <h1 className="title">Words Hunter</h1>
 
         <div className="search-bar">
 
@@ -106,7 +107,7 @@ const DictionaryApp = () => {
                 <button
                   onClick={() => new Audio(result.phonetics[0].audio).play()}
                 >
-                  🔊
+                  <HiOutlineSpeakerWave style={{color:"#f35525",fontSize:"30px"}} />
                 </button>
               )}
             </div>
@@ -127,21 +128,6 @@ const DictionaryApp = () => {
                 </ul>
               </div>
             ))}
-
-            {translations.urdu && (
-              <div className="translations">
-                <h3>🌐 Translations</h3>
-                <p>
-                  <strong>Urdu:</strong> {translations.urdu}
-                </p>
-                <p>
-                  <strong>Hindi:</strong> {translations.hindi}
-                </p>
-                <p>
-                  <strong>Spanish:</strong> {translations.spanish}
-                </p>
-              </div>
-            )}
           </div>
         )}
       </div>
